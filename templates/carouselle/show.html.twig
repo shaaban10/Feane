@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ recipe.title }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>{{ recipe.title }}</h1>
+        <p><strong>Price:</strong> {{ recipe.price }}</p>
+        <p><strong>Content:</strong> {{ recipe.content }}</p>
+
+        {% if recipe.thumbnail %}
+            <img src="{{vich_uploader_asset(recipe,'thumbnailFile')}}" alt="">
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{{ path('admin.recipe-edit', {id: recipe.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+
+            <form action="{{ path('admin.recipe-delete', {id: recipe.id}) }}" method="POST" style="display:inline-block;">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette recette ?');">Supprimer</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

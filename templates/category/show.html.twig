@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>{{ category.name }}</h1>
+        <p><strong>Slug:</strong> {{ category.Slug }}</p>
+
+
+
+
+        <div class="mt-4">
+            <a href="{{ path('admin.category.edit', {id: category.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+
+            <form action="{{ path('admin.category.delete', {id: category.id}) }}" method="POST" style="display:inline-block;">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette recette ?');">Supprimer</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
