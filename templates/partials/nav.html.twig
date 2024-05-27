@@ -1,5 +1,11 @@
-{% extends 'base.html.twig' %}
-{% block title %}HEllo{% endblock %}
-{% block nav %}
-
-{% endblock %}
+<ul class="navbar-nav  mx-auto ">
+    <li class="nav-item active">
+        <a class="nav-link" href="{{ path('app_home') }}">Accuile <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_about') }}">Qui  Nous</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_reservation') }}">Réserver </a>
+    </li>
+</ul>

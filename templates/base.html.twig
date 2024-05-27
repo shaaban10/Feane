@@ -25,11 +25,12 @@
 {% endblock %}
 <body>
 
-    {% block body %}{% endblock %}
+<div class="content-body">
+    {% include 'partials/message.html.twig' %}
+    {% block body %}
+    {% endblock %}
+</div>
 </div>
 </body>
-<foote>
-    {% block social %}
-    {% endblock %}
-</foote>
+
 </html>

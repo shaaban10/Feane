@@ -37,7 +37,9 @@ class ReservationType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => ['class' => 'form-control']
             ] )
-        ->add('submit', SubmitType::class, []);
+        ->add('submit', SubmitType::class, [
+            'label' => 'Réserver',
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -10,15 +10,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('admin',name:'admin.')]
+
+#[IsGranted('ROLE_ADMIN')]
+
 class CategoryController extends AbstractController
 {
+
+    #[Route('/', name: 'admin.index')]
+    public function admin() : Response{
+        return $this->render('admin/admin.html.twig');
+    }
     #[Route('/category', name: 'category.index')]
-    public function index(CategoryRepository $repository,EntityManagerInterface $entity): Response
+    public function index(CategoryRepository $repository): Response
     {
         $category = $repository->findAll();
-        return $this->render('category/index.html.twig',['category'=>$category]);
+        return $this->render('admin/category/index.html.twig',['category'=>$category]);
     }
 
 
@@ -34,7 +42,7 @@ public function create( EntityManagerInterface $entity,Request $request): Respon
             $this->addFlash('success', 'Category created successfully!');
             return $this->redirectToRoute('admin.category.index');
         }
-        return $this->render('category/create.html.twig',['form'=>$form->createView()]);
+        return $this->render('admin/category/create.html.twig',['form'=>$form->createView()]);
     }
 
     #[Route('/category/{id}/edit', name: 'category.edit')]
@@ -48,12 +56,12 @@ public function edit(Category $category, Request $request, EntityManagerInterfac
             return $this->redirectToRoute('admin.category.index');
 
         }
-        return $this->render('category/edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/category/edit.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route('/category/{id}/show', name: 'category.show')]
     public function show(Category $category): Response{
-        return $this->render('category/show.html.twig',['category'=>$category]);
+        return $this->render('admin/category/show.html.twig',['category'=>$category]);
     }
 
     #[Route('/category/{id}/delete', name: 'category.delete')]

@@ -1,43 +1,71 @@
 <?php
-
 namespace App\Controller;
 
+use App\Entity\Recipe;
 use App\Entity\Reservation;
 use App\Form\ReservationType;
 use App\Repository\CarouselleRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\IngredientRepository;
 use App\Repository\RecipeRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+private EntityManagerInterface $entityManager;
 
-    public function index(Request $request,EntityManagerInterface $em,RecipeRepository $repository,CategoryRepository $categoryRepository,CarouselleRepository $carouselleRepository): Response
-    {
-        $recipes = $repository->findAll();
-        $categories = $categoryRepository->findAll();
-        $carouselle = $carouselleRepository->findAll();
+public function __construct(EntityManagerInterface $entityManager)
+{
+$this->entityManager = $entityManager;
+}
 
-        $reservations = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservations);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($reservations);
-            $em->flush();
-            $this->addFlash('succes','Votre Reservation a bien été pris en compte');
-            return $this->redirectToRoute('app_home');
+#[Route('/', name: 'app_home')]
+public function index(Request $request, RecipeRepository $repository, CategoryRepository $categoryRepository, CarouselleRepository $carouselleRepository): Response
+{
+$query = $request->query->get('query');
+$recipes = [];
 
-        }
-        return $this->render('home/index.html.twig',['recipes'=>$recipes,'categories'=>$categories,'carouselle'=>$carouselle,'form'=>$form->createView()]);
-    }
+if ($query) {
+$recipeRepository = $this->entityManager->getRepository(Recipe::class);
+$recipes = $recipeRepository->findByTitleOrContent($query);
+} else {
+$recipes = $repository->findAll();
+}
+
+$categories = $categoryRepository->findAll();
+$carouselle = $carouselleRepository->findAll();
+
+$reservations = new Reservation();
+$form = $this->createForm(ReservationType::class, $reservations);
+$form->handleRequest($request);
+if ($form->isSubmitted() && $form->isValid()) {
+$this->entityManager->persist($reservations);
+$this->entityManager->flush();
+$this->addFlash('success', 'Votre réservation a bien été prise en compte');
+return $this->redirectToRoute('app_home');
+}
+
+return $this->render('home/index.html.twig', [
+'recipes' => $recipes,
+'categories' => $categories,
+'carouselle' => $carouselle,
+'form' => $form->createView(),
+'query' => $query,
+]);
+}
+
+#[Route('/recipes/{id}/show/', name: 'recipe-show', methods: ['GET', 'POST'])]
+public function show(int $id,IngredientRepository $repository): Response
+{
+$recipe = $this->entityManager->getRepository(Recipe::class)->find($id);
+$ingredients = $recipe->getIngredient();
 
 
-
-
-    }
+return $this->render('recipeShow.html.twig', ['recipe' => $recipe, 'ingredients' => $ingredients]);
+}
+}

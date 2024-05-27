@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/admin.html.twig' %}
 
 {% block title %}Liste des Recettes{% endblock %}
 
@@ -42,7 +42,7 @@
                         <td>{{ recipe.category.name | default('') }}</td>
                         <td>
                             {% if recipe.thumbnail %}
-                                <img src="{{ asset('uploads/images/' ~ recipe.thumbnail) }}" alt="{{ recipe.title }}" class="img-thumbnail" width="100">
+                                <img src="{{ vich_uploader_asset(recipe, 'thumbnailFile') }}" style="width: 50px" alt="">
                             {% else %}
                                 <span class="text-muted">Pas d'image</span>
                             {% endif %}

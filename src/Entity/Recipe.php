@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RecipeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -49,6 +51,22 @@ class Recipe
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $discountPrice = null;
+
+    /**
+     * @var Collection<int, ingredient>
+     */
+    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recipe')]
+    private Collection $ingredient;
+
+    public function __construct()
+    {
+        $this->ingredient = new ArrayCollection();
+    }
+
+
+
+
+
 
 
 
@@ -171,6 +189,40 @@ class Recipe
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, ingredient>
+     */
+    public function getIngredient(): Collection
+    {
+        return $this->ingredient;
+    }
+
+    public function addIngredient(ingredient $ingredient): static
+    {
+        if (!$this->ingredient->contains($ingredient)) {
+            $this->ingredient->add($ingredient);
+            $ingredient->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(ingredient $ingredient): static
+    {
+        if ($this->ingredient->removeElement($ingredient)) {
+            // set the owning side to null (unless already changed)
+            if ($ingredient->getRecipe() === $this) {
+                $ingredient->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
 
 
 

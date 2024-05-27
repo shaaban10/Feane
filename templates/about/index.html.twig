@@ -53,17 +53,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav  mx-auto ">
-            <li class="nav-item ">
-              <a class="nav-link" href="{{ path('app_home') }}">Home </a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="{{ path('app_about') }}">About <span class="sr-only">(current)</span> </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ path('app_reservation') }}">Book Table</a>
-            </li>
-          </ul>
+          {% include 'partials/nav.html.twig' %}
           <div class="user_option">
             <a href="" class="user_link">
               <i class="fa fa-user" aria-hidden="true"></i>
@@ -156,14 +146,15 @@
               </h2>
             </div>
             <p>
-              There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
-              in some form, by injected humour, or randomised words which don't look even slightly believable. If you
-              are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in
-              the middle of text. All
+              Welcome to Feane, your ultimate destination for exquisite dining experiences. At Feane, we take pride in crafting culinary masterpieces that tantalize your taste buds and create lasting memories.
             </p>
-            <a href="">
-              Read More
-            </a>
+            <p>
+              Our team of passionate chefs and hospitality professionals is dedicated to providing you with the finest quality dishes, prepared with fresh, locally sourced ingredients and infused with creative flair.
+            </p>
+            <p>
+              Whether you're celebrating a special occasion, enjoying a casual meal with friends, or simply indulging in a moment of culinary delight, Feane promises an unforgettable experience that will leave you craving for more.
+            </p>
+
           </div>
         </div>
       </div>

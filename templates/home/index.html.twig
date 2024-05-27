@@ -23,17 +23,7 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav  mx-auto ">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="{{ path('app_home') }}">Home <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_about') }}">About</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_reservation') }}">Book Table</a>
-                            </li>
-                        </ul>
+                        {% include 'partials/nav.html.twig' %}
                         <div class="user_option">
                             <a href="{{ path('app_login') }}" class="user_link">
                                 <i class="fa fa-user" aria-hidden="true" ></i>
@@ -92,14 +82,16 @@
                                     </g>
                 </svg>
                             </a>
-                            <form class="form-inline">
-                                <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+                            <form class="form-inline" action="{{ path('app_home') }}" method="GET">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" required>
+                                <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </button>
                             </form>
                             <a href="" class="order_online">
                                 Order Online
                             </a>
+
                         </div>
                     </div>
                 </nav>
@@ -147,11 +139,13 @@
             <div class="container ">
                 <div class="row">
                     <div class="col-md-6  ">
+
                       {% for r in recipes %}
                         {% if r.discountPrice is not null %}
                         <div class="box ">
                             <div class="img-box">
-                                <img src="{{ asset('images/recipes/' ~ r.thumbnail) }}" alt="{{ r.title }}">
+                               <a href="{{ path('recipe-show',{'id':r.id}) }}">
+                                   <img  src="{{ asset('images/recipes/' ~ r.thumbnail) }}" alt="{{ r.title }}"></a>
                             </div>
                             <div class="detail-box">
                                 <h5>
@@ -246,13 +240,16 @@
 
             <div class="filters-content">
                 <div class="row grid">
+
                     {% for r in recipes %}
 
                     <div class="col-sm-6 col-lg-4 all {{ r.category.slug }}">
                         <div class="box">
                             <div>
                                 <div class="img-box">
-                                    <img src="{{ asset('images/recipes/' ~ r.thumbnail) }}" alt="{{ r.title }}">
+                                    <a href="{{ path('recipe-show', {'id': r.id}) }}" class="details-btn">                                    <img src="{{ asset('images/recipes/' ~ r.thumbnail) }}" alt="{{ r.title }}">
+                                    </a>
+
                                 </div>
                                 <div class="detail-box">
                                     <h5>
@@ -264,6 +261,7 @@
                                         <h6>
                                             {{ r.price }}
                                         </h6>
+
                                         <a href="">
                                             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
                         <g>
@@ -317,6 +315,7 @@
                                                 <g>
                                                 </g>
                       </svg>
+
                                         </a>
                                     </div>
                                 </div>
@@ -328,11 +327,7 @@
 
                 </div>
             </div>
-            <div class="btn-box">
-                <a href="">
-                    View More
-                </a>
-            </div>
+
         </div>
     </section>
 
@@ -357,13 +352,9 @@
                             </h2>
                         </div>
                         <p>
-                            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
-                            in some form, by injected humour, or randomised words which don't look even slightly believable. If you
-                            are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in
-                            the middle of text. All
-                        </p>
-                        <a href="">
-                            Read More
+                            Bienvenue chez Feane, votre destination ultime pour des expériences gastronomiques exquises. Chez Feane, nous sommes fiers de créer des chefs-d'œuvre culinaires qui titillent vos papilles gustatives et créent des souvenirs durables.                        </p>
+                        <a href="{{ path('app_about') }}">
+                            Plus de détails
                         </a>
                     </div>
                 </div>
@@ -399,67 +390,8 @@
 
     <!-- footer section -->
     <footer class="footer_section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 footer-col">
-                    <div class="footer_contact">
-                        <h4>
-                            Contact Us
-                        </h4>
-                        <div class="contact_link_box">
-                            <a href="">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                <span>
-                  Location
-                </span>
-                            </a>
-                            <a href="">
-                                <i class="fa fa-phone" aria-hidden="true"></i>
-                                <span>
-                  Call +01 1234567890
-                </span>
-                            </a>
-                            <a href="">
-                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                                <span>
-                  demo@gmail.com
-                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 footer-col">
-                    <div class="footer_detail">
-                        <a href="" class="footer-logo">
-                            Feane
-                        </a>
-                        <p>
-                            Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with
-                        </p>
-                        {% include 'partials/socialMedia.html.twig' %}
-                    </div>
-                </div>
-                <div class="col-md-4 footer-col">
-                    <h4>
-                        Opening Hours
-                    </h4>
-                    <p>
-                        Everyday
-                    </p>
-                    <p>
-                        10.00 Am -10.00 Pm
-                    </p>
-                </div>
-            </div>
-            <div class="footer-info">
-                <p>
-                    &copy; <span id="displayYear"></span> All Rights Reserved By
-                    <a href="https://html.design/">Free Html Templates</a><br><br>
-                    &copy; <span id="displayYear"></span> Distributed By
-                    <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-                </p>
-            </div>
-        </div>
+
+        {% include 'partials/footer.html.twig' %}
     </footer>
     <!-- footer section -->
 

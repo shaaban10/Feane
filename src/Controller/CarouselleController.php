@@ -13,8 +13,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('admin',name:'admin.')]
+#[IsGranted('ROLE_ADMIN')]
 class CarouselleController extends AbstractController
 {
     #[Route('/carouselle', name: 'carouselle.index')]
@@ -23,7 +24,7 @@ class CarouselleController extends AbstractController
         $carouselle = $carouselleRepository->findAll();
 
 
-        return $this->render('carouselle/index.html.twig',['carouselle'=>$carouselle]);
+        return $this->render('admin/carouselle/index.html.twig',['carouselle'=>$carouselle]);
     }
 
 
@@ -41,7 +42,7 @@ class CarouselleController extends AbstractController
 
         }
 
-        return $this->render('carouselle/create.html.twig',['carouselle'=>$carouselle,'form'=>$form->createView()]);
+        return $this->render('admin/carouselle/create.html.twig',['carouselle'=>$carouselle,'form'=>$form->createView()]);
     }
 
     #[Route('/carouselle/{id}/edit', name: 'carouselle.edit')]
@@ -57,14 +58,14 @@ class CarouselleController extends AbstractController
             }
 
 
-        return $this->render('carouselle/edit.html.twig',['form'=>$form->createView()]);
+        return $this->render('admin/carouselle/edit.html.twig',['form'=>$form->createView()]);
     }
 
     #[Route('/carouselle/{id}/show', name: 'carouselle.show')]
     public function show(Carouselle $carouselle): Response{
 
 
-        return $this->render('carouselle/show.html.twig',['carouselle'=>$carouselle]);
+        return $this->render('admin/carouselle/show.html.twig',['carouselle'=>$carouselle]);
     }
 
     #[Route('/carouselle/{id}/delete', name: 'carouselle.delete')]

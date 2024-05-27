@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/admin.html.twig' %}
 
 {% block title %}{{ recipe.title }}{% endblock %}
 
@@ -9,9 +9,10 @@
         <p><strong>Content:</strong> {{ recipe.content }}</p>
 
         {% if recipe.thumbnail %}
-            <img src="{{vich_uploader_asset(recipe,'thumbnailFile')}}" alt="">
+            <img src="{{ vich_uploader_asset(recipe, 'thumbnailFile') }} "style="width: 150px" alt="">
         {% endif %}
 
+        {% if is_granted('ROLE_ADMIN') %}
         <div class="mt-4">
             <a href="{{ path('admin.recipe-edit', {id: recipe.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
 
@@ -20,5 +21,6 @@
                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette recette ?');">Supprimer</button>
             </form>
         </div>
+        {% endif %}
     </div>
 {% endblock %}
