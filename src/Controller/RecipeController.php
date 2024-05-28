@@ -30,7 +30,7 @@ class RecipeController extends AbstractController
         return $this->render('admin/recipe/index.html.twig',['recipes'=>$recipes]);
     }
     #[Route('/recipes/create', name: 'recipe_add')]
-    public function create(EntityManagerInterface $em,Request $request, CategoryRepository $category): Response
+    public function create(EntityManagerInterface $em,Request $request, CategoryRepository $category,IngredientRepository $repository): Response
     {
         $recipe = new Recipe();
 
@@ -94,7 +94,7 @@ class RecipeController extends AbstractController
         return $this->render('admin/ingredient/index.html.twig',['ingredients'=>$ingredients]);
     }
     #[Route('/ingredient/create', name: 'ingredient_add')]
-    public function createIngredient(EntityManagerInterface $em,Request $request, CategoryRepository $category): Response
+    public function createIngredient(EntityManagerInterface $em,Request $request): Response
     {
         $ingredient = new Ingredient();
 

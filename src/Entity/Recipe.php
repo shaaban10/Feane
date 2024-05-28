@@ -24,7 +24,7 @@ class Recipe
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $price = null;
+    private ?int $price = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $content = null;
@@ -55,13 +55,20 @@ class Recipe
     /**
      * @var Collection<int, ingredient>
      */
-    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recipe')]
+    #[ORM\ManyToMany(targetEntity: Ingredient::class, inversedBy: 'recipes')]
     private Collection $ingredient;
+
+
+
+
+
 
     public function __construct()
     {
         $this->ingredient = new ArrayCollection();
+        $this->orderItems = new ArrayCollection();
     }
+
 
 
 
@@ -87,12 +94,12 @@ class Recipe
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?int
     {
         return $this->price;
     }
 
-    public function setPrice(?string $price): static
+    public function setPrice(?int $price): static
     {
         $this->price = $price;
         return $this;
@@ -202,7 +209,6 @@ class Recipe
     {
         if (!$this->ingredient->contains($ingredient)) {
             $this->ingredient->add($ingredient);
-            $ingredient->setRecipe($this);
         }
 
         return $this;
@@ -210,15 +216,17 @@ class Recipe
 
     public function removeIngredient(ingredient $ingredient): static
     {
-        if ($this->ingredient->removeElement($ingredient)) {
-            // set the owning side to null (unless already changed)
-            if ($ingredient->getRecipe() === $this) {
-                $ingredient->setRecipe(null);
-            }
-        }
+        $this->ingredient->removeElement($ingredient);
 
         return $this;
     }
+
+
+
+
+
+
+
 
 
 

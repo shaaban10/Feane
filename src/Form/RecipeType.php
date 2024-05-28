@@ -36,6 +36,14 @@ class RecipeType extends AbstractType
             ->add('content', TextareaType::class,[
                 'attr' => ['class' => 'form-control']
             ])
+            ->add('Ingredient', EntityType::class, [
+                'class' => Ingredient::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'attr' => ['class' => 'form-control']
+
+            ])
             ->add('category', EntityType::class, [
                 'attr' => ['class' => 'form-control'],
                 'class' => Category::class,
@@ -54,15 +62,7 @@ class RecipeType extends AbstractType
                     new Image()
 
             ]])
-            ->add('ingredient', EntityType::class, [
-                'attr' => ['class' => 'form-control'],
-                'class' => Ingredient::class,
-                'choice_label' => 'name',
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true,
 
-            ])
             ->add('submit', SubmitType::class,[
                 'label' => 'Add recipe',
                 'attr' => ['class' => 'btn btn-primary']

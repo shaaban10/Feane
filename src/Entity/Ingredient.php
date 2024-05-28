@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\IngredientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -11,7 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 #[Vich\Uploadable]
-
 class Ingredient
 {
     #[ORM\Id]
@@ -25,15 +26,25 @@ class Ingredient
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Ingredient')]
-    private ?Recipe $recipe = null;
+
 
     #[ORM\Column(length: 255,nullable: true)]
     private ?string $thumbnail = null;
 
-    #[Vich\UploadableField(mapping: 'recipe', fileNameProperty: 'thumbnail')]
+    #[Vich\UploadableField(mapping: 'ingredient', fileNameProperty: 'thumbnail')]
     #[Assert\Image()]
     private ?File $thumbnailFile = null;
+
+    /**
+     * @var Collection<int, Recipe>
+     */
+    #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'ingredient')]
+    private Collection $recipes;
+
+    public function __construct()
+    {
+        $this->recipes = new ArrayCollection();
+    }
 
 
 
@@ -66,24 +77,14 @@ class Ingredient
         return $this;
     }
 
-    public function getRecipe(): ?Recipe
-    {
-        return $this->recipe;
-    }
 
-    public function setRecipe(?Recipe $recipe): static
-    {
-        $this->recipe = $recipe;
-
-        return $this;
-    }
 
     public function getThumbnail(): ?string
     {
         return $this->thumbnail;
     }
 
-    public function setThumbnail(string $thumbnail): static
+    public function setThumbnail(?string $thumbnail): static
     {
         $this->thumbnail = $thumbnail;
 
@@ -98,6 +99,33 @@ class Ingredient
     public function setThumbnailFile(?File $thumbnailFile): static
     {
         $this->thumbnailFile = $thumbnailFile;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recipe>
+     */
+    public function getRecipes(): Collection
+    {
+        return $this->recipes;
+    }
+
+    public function addRecipe(Recipe $recipe): static
+    {
+        if (!$this->recipes->contains($recipe)) {
+            $this->recipes->add($recipe);
+            $recipe->addIngredient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipe(Recipe $recipe): static
+    {
+        if ($this->recipes->removeElement($recipe)) {
+            $recipe->removeIngredient($this);
+        }
 
         return $this;
     }

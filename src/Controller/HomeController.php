@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Recipe;
 use App\Entity\Reservation;
 use App\Form\ReservationType;
+
 use App\Repository\CarouselleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\IngredientRepository;
@@ -22,6 +23,7 @@ private EntityManagerInterface $entityManager;
 public function __construct(EntityManagerInterface $entityManager)
 {
 $this->entityManager = $entityManager;
+
 }
 
 #[Route('/', name: 'app_home')]
@@ -68,4 +70,9 @@ $ingredients = $recipe->getIngredient();
 
 return $this->render('recipeShow.html.twig', ['recipe' => $recipe, 'ingredients' => $ingredients]);
 }
+
+
+
+
+
 }

@@ -6,7 +6,7 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-8 offset-lg-2">
-                <div class="card">
+                <div class="card shadow-sm">
                     <div class="card-body">
                         <a href="{{ path('app_home') }}" class="btn btn-outline-secondary mb-3">
                             <i class="fas fa-arrow-left mr-2"></i> Back to Home
@@ -15,32 +15,35 @@
 
                         <p class="card-text"><strong>Price:</strong> ${{ recipe.price }}</p>
                         {% if recipe.discountPrice is not null %}
-                        <p class="card-text"><strong>discountPrice:</strong> ${{ recipe.discountPrice }}</p>
-                            {% endif %}
+                            <p class="card-text"><strong>Discount Price:</strong> ${{ recipe.discountPrice }}</p>
+                        {% endif %}
                         <p class="card-text"><strong>Description:</strong> {{ recipe.content }}</p>
 
                         {% if recipe.thumbnail %}
                             <img src="{{ vich_uploader_asset(recipe, 'thumbnailFile') }}" class="img-fluid rounded mb-4" style="max-width: 100%;" alt="Recipe Thumbnail">
                         {% endif %}
 
-                        {% for i in ingredients %}
                         <h2 class="mt-5 mb-4 text-center">Ingredients:</h2>
                         <div class="row justify-content-center">
-                            <div class="col-md-4 mb-4">
-                                <div class="card border-0">
-                                    <div class="card-body text-center">
-{#                                        <img src="{{vich_uploader_asset(ingredients,'thumbnailFile')}}" alt="">#}
-                                        <h5 class="card-title mb-0">{{ i.name }}</h5>
+                            {% for ingredient in ingredients %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title mb-0">{{ ingredient.name }}</h5>
+                                            {% if ingredient.thumbnail %}
+                                                <img src="{{ vich_uploader_asset(ingredient, 'thumbnailFile') }}" alt="{{ ingredient.name }}" class="img-fluid mt-2" style="width: 100px;">
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                             {% endfor %}
-                            {# Add more fake ingredients as needed #}
+                            {% endfor %}
                         </div>
 
                         {# Buy button #}
                         <div class="text-center">
-                            <button class="btn btn-warning btn-lg mt-5" style="border-radius:20px "><i class="fas fa-shopping-cart mr-2"></i>Commander</button>
+                       <a href="{{ path('cart_add',{'id':recipe.id}) }}"><button class="btn btn-warning btn-lg mt-5" style="border-radius: 20px;">
+                               <i class="fas fa-shopping-cart mr-2"></i> Commander
+                           </button></a>
                         </div>
                     </div>
                 </div>

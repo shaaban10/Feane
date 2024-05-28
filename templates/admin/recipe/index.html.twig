@@ -22,9 +22,12 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Titre</th>
+                    <th scope="col">Contenu</th>
+                    <th scope="col">Ingredient</th>
                     <th scope="col">Prix</th>
                     <th scope="col">Discount</th>
-                    <th scope="col">Contenu</th>
+
+
                     <th scope="col">Category</th>
                     <th scope="col">Image</th>
                     <th scope="col">Actions</th>
@@ -35,10 +38,18 @@
                     <tr>
                         <th scope="row">{{ recipe.id }}</th>
                         <td>{{ recipe.title }}</td>
-                        <td>{{ recipe.price }}</td>
-                        <td>{{ recipe.discountPrice }}</td>
+
 
                         <td>{{ recipe.content }}</td>
+
+                        <td>
+
+                            {% for ingredient in recipe.ingredient %}
+                                {{ ingredient.name }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ recipe.price }}</td>
+                        <td>{{ recipe.discountPrice }}</td>
                         <td>{{ recipe.category.name | default('') }}</td>
                         <td>
                             {% if recipe.thumbnail %}

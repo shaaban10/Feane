@@ -10,10 +10,10 @@
             </div>
         {% endfor %}
 
-        <h1 class="my-4">Liste des Ingredient</h1>
+        <h1 class="my-4">Liste des Ingrédients</h1>
 
         <div class="mb-3">
-            <a href="{{ path('admin.ingredient_add') }}" class="btn btn-primary">Ajouter une nouvelle ingredient</a>
+            <a href="{{ path('admin.ingredient_add') }}" class="btn btn-primary">Ajouter un nouvel ingrédient</a>
         </div>
 
         <div class="table-responsive">
@@ -21,40 +21,35 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">Nom</th>
                     <th scope="col">Image</th>
                     <th scope="col">Action</th>
-
-
-
                 </tr>
                 </thead>
                 <tbody>
                 {% for i in ingredients %}
                     <tr>
-                        <th scope="row">{{i.id }}</th>
+                        <th scope="row">{{ i.id }}</th>
                         <td>{{ i.name }}</td>
                         <td>
-                            {% if i.thumbnailFile %}
-                                <img src="{{ vich_uploader_asset(ingredients, 'thumbnailFile') }}" style="width: 50px" alt="">
-                            {% else %}
-                                <span class="text-muted">Pas d'image</span>
+                            {% if i.thumbnail %}
+                                <img src="{{ vich_uploader_asset(i, 'thumbnailFile') }}" alt="" class="img-fluid mt-2" style="width: 50px;">
                             {% endif %}
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions">
-                                <a href="{{ path('admin.ingredient-edit', {id: ingredients[0].id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                <form action="{{ path('admin.ingredient-delete', {id: ingredients[0].id}) }}" method="POST" style="display:inline-block;">
+                                <a href="{{ path('admin.ingredient-edit', {id: i.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                <form action="{{ path('admin.ingredient-delete', {id: i.id}) }}" method="POST" style="display:inline-block;">
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette ingredient ?');">Supprimer</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet ingrédient ?');">Supprimer</button>
                                 </form>
-                                <a href="{{ path('admin.ingredient-show', {id: ingredients[0].id}) }}" class="btn btn-primary btn-sm">Détails</a>
+                                <a href="{{ path('admin.ingredient-show', {id: i.id}) }}" class="btn btn-primary btn-sm">Détails</a>
                             </div>
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="6" class="text-center">Aucune ingredient trouvée.</td>
+                        <td colspan="4" class="text-center">Aucun ingrédient trouvé.</td>
                     </tr>
                 {% endfor %}
                 </tbody>
