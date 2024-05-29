@@ -1,112 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        body {
-            padding: 20px;
-        }
-        .navbar-brand img {
-            max-height: 30px;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html.twig' %}
 
-<header class="header_section">
-    <div class="container">
-        <nav class="navbar navbar-expand-lg custom_nav-container">
-            <a class="navbar-brand" href="{{ path('app_home') }}">
-                <span>Feane</span>
-            </a>
+{% block body %}
+    <main class="container">
+        <section class="row">
+            <div class="col-12">
+                <h1>Panier</h1>
+                {% for element in data %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix unitaire</th>
+                        <th>Image</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class=""> </span>
-            </button>
+                        <tr>
+                            <td>{{ element.recipe.title }}</td>
+                            {% if element.recipe.discountPrice is not empty %}
+                                <td><del>{{ element.recipe.discountPrice }} €</del> {{ element.recipe.price  }} €</td>
+                            {% else %}
+                                <td>{{ element.recipe.price  }} €</td>
+                            {% endif %}
+                            <td>
+                                <img src="{{ vich_uploader_asset(element.recipe, 'thumbnailFile') }}" style="width: 50px" alt="">
+                            </td>
+                            <td>{{ element.quantity }}</td>
+                            {% if element.recipe.discountPrice is not empty %}
+                                <td>{{ (element.quantity * element.recipe.discountPrice) }} €</td>
+                            {% else %}
+                                <td>{{ (element.quantity * element.recipe.price)  }} €</td>
+                            {% endif %}
+                            <td>
+                                <a href="{{ path('cart_add', {id: element.recipe.id}) }}" class="btn btn-success">+</a>
+                                <a href="{{ path('cart_remove', {id: element.recipe.id}) }}" class="btn btn-warning">-</a>
+                                <a href="{{ path('cart_delete', {id: element.recipe.id}) }}" class="btn btn-danger">Supprimer</a>
+                            </td>
+                        </tr>
+                    <tfoot>
+                    <tr>
+                        <td colspan="4"><strong>Total</strong></td>
+                        <td><strong>{{ total  }} €</strong></td>
+                        <td>
+                            <a href="{{ path('cart_empty') }}" class="btn btn-danger">Vider</a>
+                        </td>
+                    </tr>
+                    </tfoot>
+                    {% else %}
+                        <tr>
+                            <td colspan="6">Votre panier est vide</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ path('app_home') }}">Accueil <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_about') }}">Qui Nous</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_reservation') }}">Réserver </a>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0 ml-auto">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">Login</a>
-                    </li>
-                    <!-- Add more navigation items as needed -->
-                </ul>
+                </table>
+                <a href="{{ path('orders_add') }}" class="btn btn-primary">valider le panier</a>
             </div>
-        </nav>
-    </div>
-</header>
 
-<div class="container">
-    <h1>Your Shopping Cart</h1>
-
-    {% if data is empty %}
-        <p>Your cart is empty.</p>
-    {% else %}
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Recipe</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Image</th>
-                <th>Total</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% set totalPrice = 0 %}
-            {% for entry in data %}
-                {% set itemTotal = entry.recipe.price * entry.quantity %}
-                {% set totalPrice = totalPrice + itemTotal %}
-                <tr>
-                    <td>{{ entry.recipe.title }}</td>
-                    <td>{{ entry.quantity }}</td>
-                    <td>{{ entry.recipe.price }}</td>
-                    <td><img src="{{ asset('images/recipes/' ~ entry.recipe.thumbnail) }}" alt="{{ entry.recipe.title }}" style="width: 50px"></td>
-                    <td>{{ itemTotal }}</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Actions">
-                            <a href="{{ path('cart_add',{'id':entry.recipe.id})}}" class="btn btn-success btn-sm">+</a>
-                            <a href="{{ path('cart_remove',{'id':entry.recipe.id})}}" class="btn btn-warning btn-sm">-</a>
-                            <a href="{{ path('cart_delete',{'id':entry.recipe.id})}}" class="btn btn-danger btn-sm">Remove</a>
-                        </div>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-
-</div>
-
-<div class="container total-price">
-    <p><strong>Total: {{ totalPrice }} €</strong></p>
-</div>
-
-<div class="container clear-btn">
-    <a href="{{ path('cart_delete',{'id':entry.recipe.id})}}" class="btn btn-danger">Clear Cart</a>
-</div>
-{% endfor %}
-{% endif %}
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+        </section>
+    </main>
+{% endblock %}

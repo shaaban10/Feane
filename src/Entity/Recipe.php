@@ -50,7 +50,7 @@ class Recipe
     private ?Category $category = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $discountPrice = null;
+    private ?int $discountPrice = null;
 
     /**
      * @var Collection<int, ingredient>
@@ -185,12 +185,12 @@ class Recipe
         return $this;
     }
 
-    public function getDiscountPrice(): ?string
+    public function getDiscountPrice(): ?int
     {
         return $this->discountPrice;
     }
 
-    public function setDiscountPrice(?string $discountPrice): static
+    public function setDiscountPrice(?int $discountPrice): static
     {
         $this->discountPrice = $discountPrice;
 

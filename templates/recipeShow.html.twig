@@ -13,9 +13,8 @@
                         </a>
                         <h1 class="card-title text-center mb-4">{{ recipe.title }}</h1>
 
-                        <p class="card-text"><strong>Price:</strong> ${{ recipe.price }}</p>
                         {% if recipe.discountPrice is not null %}
-                            <p class="card-text"><strong>Discount Price:</strong> ${{ recipe.discountPrice }}</p>
+                            <td> Price after discount:  <del>{{ recipe.discountPrice }} €</del> {{ recipe.price  }} €</td>
                         {% endif %}
                         <p class="card-text"><strong>Description:</strong> {{ recipe.content }}</p>
 
