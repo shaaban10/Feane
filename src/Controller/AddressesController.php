@@ -61,4 +61,21 @@ class AddressesController extends AbstractController
         $this->addFlash('warning','votre Adresses a été bien supprieme');
         return $this->redirectToRoute('addresses_index');
     }
+
+
+    #[Route('/addresses/select', name: 'select')]
+
+    public function selectAddress(Request $request)
+    {
+        $selectedAddressId = $request->request->get('selectedAddress');
+
+        if ($selectedAddressId) {
+            // Vous pouvez maintenant utiliser $selectedAddressId pour effectuer l'action souhaitée
+            // Par exemple, rediriger vers une autre page ou effectuer une action spécifique
+            return $this->redirectToRoute('orders_add', ['id' => $selectedAddressId]);
+        }
+
+        // Si aucune adresse n'est sélectionnée, vous pouvez gérer l'erreur ici
+        return $this->redirectToRoute('addresses_list');
+    }
 }
