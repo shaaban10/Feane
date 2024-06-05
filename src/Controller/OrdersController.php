@@ -60,9 +60,10 @@ class OrdersController extends AbstractController
         $em->persist($order);
         $em->flush();
         $session->remove('panier');
-        $this->addFlash('message', 'Commande créée avec succès');
+
         return $this->render('orders/index.html.twig', [
             'orderDetails' => $orderDetails,
             'total' => $total, // Pass total to the template
+            'reference' => $order->getReference()
         ]);
     }}

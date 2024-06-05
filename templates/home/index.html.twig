@@ -319,6 +319,7 @@
                             </div>
                         </div>
                     </div>
+
                     {% endfor %}
 
 
@@ -331,7 +332,9 @@
     <!-- end food section -->
 
     <!-- about section -->
-
+    <div class="pagination-center">
+       {{ knp_pagination_render(recipes) }}
+    </div>
     <section class="about_section layout_padding">
         <div class="container  ">
 

@@ -1,0 +1,13 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur de Paiement{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-danger">Erreur de Paiement</h1>
+        <p>Votre paiement n'a pas pu être traité. Veuillez réessayer.</p>
+        <p>Référence de la commande : {{ reference }}</p>
+        <a href="{{ path('cart_index') }}" class="btn btn-warning">Retour au panier</a>
+    </div>
+{% endblock %}

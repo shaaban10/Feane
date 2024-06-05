@@ -34,9 +34,13 @@ $recipes = [];
 
 if ($query) {
 $recipeRepository = $this->entityManager->getRepository(Recipe::class);
-$recipes = $recipeRepository->findByTitleOrContent($query);
+    $recipes = $recipeRepository->findByTitleOrContent($query);
+
+
 } else {
-$recipes = $repository->findAll();
+    $page = $request->query->getInt('page', 1);
+
+    $recipes = $repository->paginateRecipe($page);
 }
 
 $categories = $categoryRepository->findAll();

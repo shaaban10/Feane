@@ -3,6 +3,8 @@
 {% block body %}
     <div class="container mt-5">
         <h1 class="text-center mb-4">Liste des adresses</h1>
+        <a href="{{ path('addresses_add')}}" class="btn btn-sm btn-outline-primary" style="margin-bottom: 20px">Add Addresse</a>
+
         {% if addresses is empty %}
             <div class="alert alert-info" role="alert">
                 Aucune adresse trouvée.
@@ -35,13 +37,9 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Choisir cette adresse</button>
-                </div>
+                <input type="hidden" name="reference" value="{{ reference }}"> <!-- hidden field for reference -->
+                <button type="submit" class="btn btn-primary mt-3">Sélectionner cette adresse</button>
             </form>
         {% endif %}
-        <div class="text-center mt-4">
-            <a href="{{ path('addresses_add') }}" class="btn btn-primary btn-lg">Ajouter une adresse</a>
-        </div>
     </div>
 {% endblock %}

@@ -1,70 +1,75 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stripe Payment Gateway</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
 
-{% block body %}
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Payment Page</h1>
-        <form id="payment-form">
-            <div id="card-element">
-                <!-- A Stripe Element will be inserted here. -->
+<div>
+    {{ orderReference }}
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    {% for message in app.flashes('success') %}
+                        <div
+                                style="color: green;
+                                    border: 2px green solid;
+                                    text-align: center;
+                                    padding: 5px;margin-bottom: 10px;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    <form id='checkout-form' method='post' action="{{ path('app_stripe_charge') }}">
+                        <input type='hidden' name='stripeToken' id='stripe-token-id'>
+                        <input type='hidden' name='orderTotal' value="{{ orderReference }}">
+                        <label for="card-element" class="mb-5">Checkout Forms</label>
+                        <br>
+                        <div id="card-element" class="form-control" ></div>
+                        <button
+                                id='pay-btn'
+                                class="btn btn-success mt-3"
+                                type="button"
+                                style="margin-top: 20px; width: 100%;padding: 7px;">
+                            Payer {{ orderReference }} €
+                        </button>
+                    </form>
+
+                </div>
             </div>
-
-            <!-- Used to display form errors. -->
-            <div id="card-errors" role="alert"></div>
-
-            <button class="btn btn-primary mt-3">Submit Payment</button>
-        </form>
+        </div>
     </div>
+</div>
 
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
-        var stripe = Stripe('{{ stripe_public_key }}');
-        var elements = stripe.elements();
-        var cardElement = elements.create('card');
+<script src="https://js.stripe.com/v3/" ></script>
+<script>
+    var stripe = Stripe("{{ stripe_key }}");
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#card-element');
 
-        cardElement.mount('#card-element');
+    function createToken() {
+        document.getElementById("pay-btn").disabled = true;
+        stripe.createToken(cardElement).then(function(result) {
+            if(typeof result.error != 'undefined') {
+                document.getElementById("pay-btn").disabled = false;
+                alert(result.error.message);
+            }
 
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            stripe.createPaymentMethod('card', cardElement).then(function(result) {
-                if (result.error) {
-                    // Display error.message in your UI.
-                    var errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = result.error.message;
-                } else {
-                    // Send the PaymentMethod to your server
-                    fetch('/create-payment-intent', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            payment_method_id: result.paymentMethod.id
-                        }),
-                    }).then(function(response) {
-                        return response.json();
-                    }).then(function(responseJson) {
-                        if (responseJson.error) {
-                            var errorElement = document.getElementById('card-errors');
-                            errorElement.textContent = responseJson.error.message;
-                        } else {
-                            // Use the client secret to confirm the payment
-                            stripe.confirmCardPayment(responseJson.clientSecret).then(function(result) {
-                                if (result.error) {
-                                    var errorElement = document.getElementById('card-errors');
-                                    errorElement.textContent = result.error.message;
-                                } else {
-                                    if (result.paymentIntent.status === 'succeeded') {
-                                        window.location.href = '/payment-success';
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            // creating token success
+            if(typeof result.token != 'undefined') {
+                document.getElementById("stripe-token-id").value = result.token.id;
+                document.getElementById('checkout-form').submit();
+            }
         });
-    </script>
-{% endblock %}
+    }
+</script>
+</body>
+</html>
