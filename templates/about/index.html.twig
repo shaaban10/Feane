@@ -27,10 +27,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           {% include 'partials/nav.html.twig' %}
           <div class="user_option">
-            <a href="{{ path('app_login') }}" class="user_link">
-              <i class="fa fa-user" aria-hidden="true"></i>
-            </a>
-            <a class="cart_link" href="{{ path('cart_index') }}">
+            {% if app.user %}
+              <a href="{{ path('profile_index') }}" class="user_link">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+            {% else %}
+              <a href="{{ path('app_login') }}" class="user_link">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+            {% endif %}            <a class="cart_link" href="{{ path('cart_index') }}">
               <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
                   <g>
                     <g>
@@ -84,8 +89,9 @@
                 </g>
                 </svg>
             </a>
-            <form class="form-inline">
-              <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+            <form class="form-inline" action="{{ path('app_home') }}" method="GET">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" required>
+              <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>
               </button>
             </form>
@@ -116,14 +122,11 @@
               </h2>
             </div>
             <p>
-              Welcome to Feane, your ultimate destination for exquisite dining experiences. At Feane, we take pride in crafting culinary masterpieces that tantalize your taste buds and create lasting memories.
-            </p>
+              Bienvenue à Feane, votre destination ultime pour des expériences gastronomiques exquises. Chez Feane, nous sommes fiers de créer des chefs-d'œuvre culinaires qui titillent vos papilles gustatives et créent des souvenirs durables.            </p>
             <p>
-              Our team of passionate chefs and hospitality professionals is dedicated to providing you with the finest quality dishes, prepared with fresh, locally sourced ingredients and infused with creative flair.
-            </p>
+              Notre équipe de chefs passionnés et de professionnels de l'hospitalité est dédiée à vous offrir des plats de la plus haute qualité, préparés avec des ingrédients frais et locaux et infusés d'une touche de créativité.            </p>
             <p>
-              Whether you're celebrating a special occasion, enjoying a casual meal with friends, or simply indulging in a moment of culinary delight, Feane promises an unforgettable experience that will leave you craving for more.
-            </p>
+              Que vous célébriez une occasion spéciale, que vous partagiez un repas décontracté entre amis, ou que vous vous laissiez simplement aller à un moment de délice culinaire, Feane promet une expérience inoubliable qui vous laissera désirer encore plus.            </p>
 
           </div>
         </div>

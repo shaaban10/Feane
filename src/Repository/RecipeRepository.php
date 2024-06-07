@@ -35,7 +35,7 @@ class RecipeRepository extends ServiceEntityRepository
             $this->createQueryBuilder('r'),
             $page,
             10, /**lilit des elements par page*/
-             ['wrap-queries' => true]
+
         );
 
     }

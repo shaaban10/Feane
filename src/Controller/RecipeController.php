@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
+
+use App\Entity\Orders;
+use App\Entity\OrdersDetails;
+use App\Entity\User;
 use App\Entity\Ingredient;
+
 use App\Entity\Recipe;
 use App\Form\IngriedentType;
 use App\Form\RecipeType;
@@ -18,6 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Knp\Component\Pager\PaginatorInterface;
+
 #[Route('admin', name: 'admin.')]
 #[IsGranted('ROLE_ADMIN')]
 
@@ -146,5 +152,45 @@ class RecipeController extends AbstractController
         $this->addFlash('success', $message);
         return $this->redirectToRoute('admin.recipes.index');
     }
+    #[Route('/commandes', name: 'commandes')]
+    public function commandes(RecipeRepository $repository,EntityManagerInterface $em, PaginatorInterface $paginator, Request $request)
+    {
+        // Fetch all users
+        $users = $em->getRepository(User::class)->findAll();
 
-}
+        $ordersWithDetails = [];
+        foreach ($users as $user) {
+            // Fetch orders related to the user
+            $orders = $em->getRepository(Orders::class)->findBy(['users' => $user]);
+
+            foreach ($orders as $order) {
+                $orderDetails = $em->getRepository(OrdersDetails::class)->findBy(['orders' => $order]);
+
+                $detailsWithRecipes = [];
+                foreach ($orderDetails as $detail) {
+                    $recipe = $detail->getRecipes();
+                    $detailsWithRecipes[] = [
+                        'detail' => $detail,
+                        'recipeName' => $recipe ? $recipe->getTitle() : null,
+                    ];
+                }
+
+                $ordersWithDetails[] = [
+                    'order' => $order,
+                    'user' => $user, // Include the user information
+                    'details' => $detailsWithRecipes,
+                ];
+            }
+        }
+        $query = $request->query->get('q'); // Get the search query from the request
+        if ($query === null) {
+            $query = ''; // Set $query to an empty string if it's null
+        }
+
+        $page = $request->query->getInt('page', 1);
+
+        $recipe = $repository->findByTitleOrContent($query);
+        return $this->render('commandes/index.html.twig', [
+            'ordersWithDetails' => $ordersWithDetails,
+            'recipe'=>$recipe
+        ]);}}

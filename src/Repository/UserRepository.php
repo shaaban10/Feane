@@ -15,7 +15,18 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-
+    public function findAllWithOrders()
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.orders', 'o')
+            ->addSelect('o')
+            ->leftJoin('o.ordersDetails', 'd')
+            ->addSelect('d')
+            ->leftJoin('d.recipe', 'r')
+            ->addSelect('r')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

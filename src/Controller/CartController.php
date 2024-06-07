@@ -75,7 +75,7 @@ class CartController extends AbstractController
         $session->set('panier', $panier);
 
         // Update session expiration time
-        $session->setMetadataBag(new MetadataBag());
+        $session->getMetadataBag(new MetadataBag());
         $session->migrate(true, 18000); // 18000 seconds = 5 hours
 
         $session->save(); // Save session to apply the new expiration time
@@ -96,7 +96,7 @@ class CartController extends AbstractController
         $session->set('panier', $panier);
 
         // Update session expiration time
-        $session->setMetadataBag(new MetadataBag());
+        $session->getMetadataBag(new MetadataBag());
         $session->migrate(true, 18000); // 18000 seconds = 5 hours
 
         $session->save(); // Save session to apply the new expiration time

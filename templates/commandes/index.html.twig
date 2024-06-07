@@ -1,0 +1,50 @@
+{# templates/commandes/index.html.twig #}
+
+{% extends 'admin/admin.html.twig' %}
+
+{% block title %}List of Orders{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mt-5">List of Orders</h1>
+
+        {% if ordersWithDetails is empty %}
+            <div class="alert alert-info mt-3" role="alert">
+                No orders found.
+            </div>
+        {% else %}
+            <div class="table-responsive mt-4">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">User Email</th>
+                        <th scope="col">Recipe Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for orderWithDetails in ordersWithDetails %}
+                        {% for detailWithRecipe in orderWithDetails.details %}
+                            <tr>
+                                {% if loop.index == 1 %}
+                                    <td rowspan="{{ orderWithDetails.details|length }}">{{ orderWithDetails.order.getId() }}</td>
+                                    <td rowspan="{{ orderWithDetails.details|length }}">{{ orderWithDetails.user.getEmail() }}</td>
+                                {% endif %}
+                                <td>{{ detailWithRecipe.recipeName }}</td>
+                                <td>{{ detailWithRecipe.detail.getQuantity() }}</td>
+                                <td>{{ detailWithRecipe.detail.getPrice() }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination mt-4">
+                {{ knp_pagination_render(recipe) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -41,6 +41,9 @@
                         <form action="{{ path('payment_stripe',{reference:reference}) }}" method="post" class="mt-4">
                             <button type="submit" class="btn btn-primary btn-block">Payer</button>
                         </form>
+                        <a href="{{ path('addresses_index') }}" class="btn btn-outline-secondary mb-3">
+                            <i class="fas fa-arrow-left mr-2 "></i> Back to addresses
+                        </a>
                     </div>
                 </div>
             </div>
